@@ -1,22 +1,29 @@
 class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
-        int n = nums.size();
-        int l,r;
-         for(l=n-2;l>=0;l--)                           // find incresing sequence
+        int n = nums.size(),k,l;
+        for(k = n-2;k >= 0;k--)
         {
-            if(nums[l]<nums[l+1]) break;
+            if(nums[k] < nums[k+1]){
+                break;
+            }
         }
-        if(l<0) reverse(nums.begin(),nums.end());
+        if(k < 0)
+        {
+            reverse(nums.begin(),nums.end());
+        }
         else
         {
-            for(r=n-1;r>l;r--)                       // find pivot
+            for(l = n-1;l>k;l--)
             {
-                if(nums[r]>nums[l]) break;
+                if(nums[l] > nums[k])
+                {
+                    break;
+                }
             }
-            swap(nums[l],nums[r]);                  // swap l,r
-            
-            reverse(nums.begin()+l+1,nums.end());   // reverse from l+1 to end
+            swap(nums[k],nums[l]);
+            reverse(nums.begin()+k+1, nums.end());
         }
+        
     }
 };
