@@ -1,28 +1,38 @@
 class Solution {
 public:
-     vector<string> wordSubsets(vector<string>& A, vector<string>& B) {
-        vector<int> count(26), tmp(26);
-        int i;
-        for (string b : B) {
-            tmp = counter(b);
-            for (i = 0; i < 26; ++i)
-                count[i] = max(count[i], tmp[i]);
-        }
-        vector<string> res;
-        for (string a : A) {
-            tmp = counter(a);
-            for (i = 0; i < 26; ++i)
-                if (tmp[i] < count[i])
-                    break;
-            if (i == 26) res.push_back(a);
-        }
-        return res;
-    }
-
-    vector<int> counter(string& word) {
-        vector<int> count(26);
-        for (char c : word) count[c - 'a']++;
-        return count;
-    }
     
+   unordered_map<char,int>mp;
+vector<string> wordSubsets(vector<string>& words1, vector<string>& words2) {
+    vector<string>res;
+    for(auto &w : words2)
+    {
+        unordered_map<char,int>tmp; 
+        for(char &ch : w)
+        {
+            tmp[ch]++;
+            if(tmp[ch]>mp[ch]) mp[ch]++; 
+        }
+    }  
+    for(auto & w: words1)
+    {
+        unordered_map<char,int>ump;
+        for(char & ch : w)
+        {
+            ump[ch]++;
+        }
+        bool isUniversal = true;
+        for(auto m : mp)
+        {
+           
+            if(m.second>ump[m.first])
+            {
+                isUniversal = false;
+                break;
+            }
+        }
+      
+        if(isUniversal) res.push_back(w);
+    }
+    return res;
+}
 };
