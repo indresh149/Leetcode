@@ -1,3 +1,11 @@
+/*
+    The idea here is to build a segment tree. Each node stores the left and right
+    endpoint of an interval and the sum of that interval. All of the leaves will store
+    elements of the array and each internal node will store sum of leaves under it.
+    Creating the tree takes O(n) time. Query and updates are both O(log n).
+*/
+
+//Segment tree node
 class NumArray {
     private:
     int n;
@@ -7,11 +15,17 @@ class NumArray {
         int middle;
         int leftSum, rightSum;
         
+        //Base case
         if(left ==  right) return seg[node] = nums[left];
         
         middle = (left + right)/2;
+        
+        //recursively build the Segment tree
         leftSum = build(nums,left,middle,2*node+1);
         rightSum = build(nums,middle+1,right,2*node+2);
+        
+        //Total stores the sum of all leaves under root
+        //i.e. those elements lying between (start, end)
         return seg[node] = leftSum + rightSum;
     }
     
@@ -19,6 +33,7 @@ class NumArray {
         int leftSum, rightSum;
         int middle;
         
+        //If the range exactly matches the root, we already have the sum
         if(right < ss || left > se) return 0;
         if(left <= ss && se <= right) return seg[node];
         
@@ -33,6 +48,8 @@ class NumArray {
         int leftSum,rightSum;
         int middle;
         
+        //Base case. The actual value will be updated in a leaf.
+        //The total is then propogated upwards
         if(index < ss || index > se) return seg[node];
         if(ss == se) return seg[node] = newValue;
         
