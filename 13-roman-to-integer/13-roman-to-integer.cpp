@@ -14,6 +14,6 @@ public:
                 sum += T[s[i]];
             }
         }
-        return sum;
+        return sum; 
     }
 };
