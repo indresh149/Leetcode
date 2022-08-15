@@ -1,22 +1,28 @@
 class Solution {
 public:
     vector<int> smallerNumbersThanCurrent(vector<int>& nums) {
-        map<int,int> mp;  // Map for storing frequencies of number less than that number
-        int n = nums.size();
+        vector<int> ans;  // vector to store final answer
+        int count[101] = {0};    // Array to store count
+		int len = nums.size();
         
-        vector<int> sortednum = nums;
-        sort(sortednum.begin(),sortednum.end());
-        
-        //Iterating from back and assigning index of number to that number 
-        for(int i = n-1;i>=0;i--)
-        {
-            mp[sortednum[i]] = i;
+        //Store count of each number
+        for(int i = 0; i < len; i++) {
+            count[nums[i]]++;
         }
         
-        //Assigning frequencies to each elements
-        for(int i= 0;i<n;i++){
-            nums[i] = mp[nums[i]];
+        //Assigning count of smaller number to that number
+        for(int i = 1; i < 101; i++) {
+            count[i] += count[i - 1];
         }
-        return nums;
+        
+        
+        for(int i = 0; i < len; i++) {
+            if(nums[i] == 0)
+                ans.push_back(0);
+            else
+                ans.push_back(count[nums[i] - 1]);
+                
+        }
+        return ans;
     }
 };
