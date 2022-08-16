@@ -1,22 +1,27 @@
 class Solution {
 public:
-    void dfs(vector<vector<int>>& image, int i, int j,int val, int newColor)
+    void dfs(int row,int col, vector<vector<int>> &ans, vector<vector<int>> &image,int newColor
+    ,int delRow[],int delCol[],int iniColor)
     {
-        if(i<0 || i>=image.size() || j<0 || j>= image[0].size() || image[i][j] == newColor || image[i][j] != val)
-        {
-            return;
+        ans[row][col] = newColor;
+        int n = image.size();
+        int m = image[0].size();
+        for(int i=0;i<4;i++){
+            int nrow = row + delRow[i];
+            int ncol = col + delCol[i];
+            if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m  && image[nrow][ncol] == iniColor && ans[nrow][ncol] != newColor)
+            {
+                dfs(nrow,ncol,ans,image,newColor,delRow,delCol,iniColor);
+            }
         }
-        image[i][j] = newColor;
-        dfs(image,i-1,j,val,newColor);
-        dfs(image,i+1,j,val,newColor);
-        dfs(image,i,j-1,val,newColor);
-        dfs(image,i,j+1,val,newColor);
     }
     
-    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor)
-    {
-        int val = image[sr][sc];
-        dfs(image,sr,sc,val,newColor);
-        return image;
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+         int iniColor = image[sr][sc];
+        vector<vector<int>> ans = image;
+        int delRow[] = {-1,0,+1,0};
+        int delCol[] = {0,+1,0,-1};
+        dfs(sr,sc,ans,image,color,delRow,delCol,iniColor);
+        return ans;
     }
 };
