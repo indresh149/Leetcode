@@ -1,23 +1,25 @@
 class Solution {
 public:
     int minSetSize(vector<int>& arr) {
-        unordered_map<int,int> m;
-        for(int i=0;i<arr.size();i++){
-            m[arr[i]]++;
-        }
-        multiset<int, greater<int>> s;
-        
-        for(auto n:m){
-            s.insert(n.second);
-        }
-        int siz = arr.size();
-        int cnt = 0;
-        int ans = 0;
-        
-        for(auto it = s.begin();cnt*2<siz;it++)
+       vector<int> v;
+        sort(arr.begin(),arr.end());
+        int c = 1;
+        for(int i=1;i<arr.size();i++)
         {
-            ans++;
-            cnt += *it;
+            if(arr[i] == arr[i-1]) c++;
+            else
+            {
+                v.push_back(c);
+                c = 1;
+            }
+        }
+        v.push_back(c);
+        sort(v.begin(),v.end());
+        int n = arr.size()/2, ans = 0;
+        for(int i=v.size()-1;n>0 && i>=0;i--)
+        {
+            ans ++;
+            n -= v[i];
         }
         return ans;
     }
