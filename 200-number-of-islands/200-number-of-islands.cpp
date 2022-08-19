@@ -1,41 +1,48 @@
 class Solution {
 public:
-     void dfs(int r,int c,int n,int m,vector<int> & dr,vector<int> &dc,vector<vector<char>> &grid,vector<vector<int>> & visited)
-    {
-        visited[r][c]=1;
-        
-        for(int i=0;i<4;i++)
+    void bfs(int row,int col,vector<vector<int>> &vis,vector<vector<char>> &grid,vector<int> & dr,vector<int> &dc)
+  {
+      vis[row][col] = 1;
+      queue<pair<int,int>> q;
+      q.push({row,col});
+      int n = grid.size();
+      int m = grid[0].size();
+      
+      while(!q.empty()){
+          int row = q.front().first;
+          int col = q.front().second;
+          q.pop();
+          
+          //traverse in the neighbours and mark them if its a land
+          for(int i=0;i<4;i++)
         {
-          int nr=r+dr[i],nc=c+dc[i];
-                
-              if(nr>=0 && nr<n && nc>=0 && nc<m && grid[nr][nc]=='1' && !visited[nr][nc])  
-              { dfs(nr,nc,n,m,dr,dc,grid,visited);}
-            
-        }
-        
-        
-        
-    }
-    
-    int numIslands(vector<vector<char>>& grid) {
-        int n=grid.size();
-      int m=grid[0].size();  
-      vector<vector<int>> visited(n,vector<int>(m,0));
-      int count=0;  
-      vector<int> dr,dc;
-      dr={-1,1,0,0};
-       dc={0,0,-1,1}; 
-      for(int i=0;i<n;i++)
-      {
-          for(int j=0;j<m;j++)
-          {
-              if(grid[i][j]=='1' && !visited[i][j])
-              {
-                  count++;
-                  dfs(i,j,n,m,dr,dc,grid,visited);
+                  int nrow=row+dr[i],ncol=col+dc[i];
+                  if(nrow >=0 && nrow <n && ncol >= 0 && ncol < m && grid[nrow][ncol] == '1' && !vis[nrow][ncol])
+                  {
+                      vis[nrow][ncol] = 1;
+                      q.push({nrow,ncol});
+                  }
               }
           }
       }
-    return count;    
+  
+    
+    int numIslands(vector<vector<char>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        int cnt = 0;
+        vector<int> dr,dc;
+        dr={-1,1,0,0};
+        dc={0,0,-1,1}; 
+        vector<vector<int>> vis(n,vector<int>(m,0));
+        for(int row = 0; row < n;row++){
+            for(int col = 0;col < m;col++){
+                if(!vis[row][col] && grid[row][col] == '1'){
+                    cnt++;
+                    bfs(row,col,vis,grid,dr,dc);
+                }
+            }
+        }
+        return cnt;
     }
 };
