@@ -6,6 +6,7 @@ public:
         int n = grid.size();
         int m = grid[0].size();
         
+        //traverse in the neighbours and mark them if its a land
         for(int i=0;i<4;i++)
         {
           int nrow=row+dr[i],ncol=col+dc[i];
