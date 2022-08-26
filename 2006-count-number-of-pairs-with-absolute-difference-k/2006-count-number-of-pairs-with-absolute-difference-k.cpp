@@ -1,15 +1,16 @@
 class Solution {
 public:
     int countKDifference(vector<int>& nums, int k) {
-        int n = nums.size();
-        int cnt = 0;
-        for(int i = 0;i<n;i++){
-            for(int j = i;j<n;j++){
-                if(abs(nums[i] - nums[j]) == k){
-                    cnt++;
-                }
-            }
+        int cnt[101] = {};
+        int res = 0;
+        for(auto it:nums)
+        {
+            ++cnt[it];
         }
-        return cnt;
+        for(int i = k+1;i<101;i++)
+        {
+            res += cnt[i]*cnt[i-k];
+        }
+        return res;
     }
 };
