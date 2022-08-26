@@ -14,7 +14,7 @@ public:
             
         }
         
-        if(ans1.compare(ans2)==0) return true;
+        if(ans1 == ans2) return true;
         return false;
     }
 };
