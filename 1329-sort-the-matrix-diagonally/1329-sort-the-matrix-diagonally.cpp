@@ -1,25 +1,28 @@
 class Solution {
 public:
     void compsort(vector<vector<int>>& mat,int row,int col,int m,int n){
-        vector<int> values;
+        int count[101] = {0};
         int r = row;
         int c = col;
         while(r < m && c < n){
-            values.push_back(mat[r][c]);
+            count[mat[r][c]]++;
             r++;
             c++;
         }
-        
-        sort(values.begin(),values.end());
-        
+      
         r  =  row;
         c  = col;
-        int ind  = 0;
-        while(r < m && c < n){
-            mat[r][c] = values[ind++];
-            r++;
-            c++;
+        for(int i=1;i<101;i++){
+            if(count[i] > 0){
+                int cnt = count[i];
+                while(cnt --> 0){
+                    mat[r][c] = i;
+                    r++;
+                    c++;
+                }
+            }
         }
+       
     }
     vector<vector<int>> diagonalSort(vector<vector<int>>& mat) {
         int m = mat.size();
