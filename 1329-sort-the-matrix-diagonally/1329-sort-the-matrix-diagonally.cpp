@@ -1,43 +1,27 @@
 class Solution {
 public:
-    void compsort(vector<vector<int>>& mat,int row,int col,int m,int n){
-        int count[101] = {0};
-        int r = row;
-        int c = col;
-        while(r < m && c < n){
-            count[mat[r][c]]++;
-            r++;
-            c++;
-        }
-      
-        r  =  row;
-        c  = col;
-        for(int i=1;i<101;i++){
-            if(count[i] > 0){
-                int cnt = count[i];
-                while(cnt --> 0){
-                    mat[r][c] = i;
-                    r++;
-                    c++;
-                }
-            }
-        }
-       
-    }
     vector<vector<int>> diagonalSort(vector<vector<int>>& mat) {
-        int m = mat.size();
-        int n = mat[0].size();
-        
-        //row  = 0
-        for(int col = 0;col < n;col++){
-            compsort(mat,0,col,m,n);
+    unordered_map<int, vector<int>> mp;
+    int m=mat.size();
+    int n=mat[0].size();
+    
+    for(int i=0;i<m;i++) {
+        for(int j=0;j<n;j++) {
+            mp[i-j].push_back(mat[i][j]);
         }
-        
-        //col = 0
-        for(int row  = 1;row <m;row++){
-            compsort(mat,row,0,m,n);
-            
+    }
+    
+    for(int k=-(n-1);k<m;k++) {
+        sort(mp[k].begin(),mp[k].end());
+    }
+    
+    for(int i=m-1;i>=0;i--) {
+        for(int j=n-1;j>=0;j--) {
+            mat[i][j]=mp[i-j].back();
+            mp[i-j].pop_back();
         }
-        return mat;
+    }
+    return mat;
+
     }
 };
