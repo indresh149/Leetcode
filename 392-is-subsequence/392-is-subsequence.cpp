@@ -1,25 +1,31 @@
 class Solution {
 public:
-    bool isSubs(string& s, string& t, int m, int n)
+    
+    // returns the length of longest common subsequence
+    int isSubs(string& s1, string& s2, int i , int j,vector<vector<int>> &t)
     {
-        if(m == 0)
-            return true;
-        if(n == 0)
-            return false;
-        
-        if (s[m - 1] == t[n - 1])
-            return isSubs(s, t, m - 1, n - 1);
- 
-        return isSubs(s, t, m, n - 1);
+        if(i == 0 || j == 0)
+            return 0;
+        if(t[i][j] != -1)
+            return t[i][j];
+        if(s1[i-1] == s2[j-1])
+            return t[i][j] = 1 + isSubs(s1,s2,i-1,j-1,t);
+        else
+            return t[i][j] = isSubs(s1,s2,i,j-1,t);
     }
     
     
-    bool isSubsequence(string s, string t) {
+    bool isSubsequence(string s1, string s2) {
+        int m = s1.length();
+        int n = s2.length();
         
-       if( isSubs(s,t,s.length(),t.length()))
-           return true;
+        if(m >  n)
+            return false;
         
+        vector<vector<int>> t(m+1,vector<int> (n+1,-1));
+    
+        if(isSubs(s1,s2,m,n,t) == m)
+            return true;
         return false;
-        
     }
 };
