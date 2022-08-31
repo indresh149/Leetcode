@@ -1,16 +1,48 @@
 class Solution {
 public:
-    void dfs(vector<vector<int>>& A, int i, int j) {
-  if (i < 0 || j < 0 || i == A.size() || j == A[i].size() || A[i][j] != 1) return;
-  A[i][j] = 0;
-  dfs(A, i + 1, j), dfs(A, i - 1, j), dfs(A, i, j + 1), dfs(A, i, j - 1);
-}
-int numEnclaves(vector<vector<int>>& A) {
-  for (auto i = 0; i < A.size(); ++i)
-    for (auto j = 0; j < A[0].size(); ++j) 
-      if (i * j == 0 || i == A.size() - 1 || j == A[i].size() - 1) dfs(A, i, j);
-
-  return accumulate(begin(A), end(A), 0, [](int s, vector<int> &r)
-    { return s + accumulate(begin(r), end(r), 0); });
-}
+    int numEnclaves(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        queue<pair<int,int>> q;
+        vector<vector<int>> vis(n,vector<int> (m,0));
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                //First row, first col, last row, last col
+                if(i == 0 || j == 0 || i== n-1 ||j == m-1){
+                    if(grid[i][j] == 1){
+                        q.push({i,j});
+                        vis[i][j] = 1;
+                    }
+                }
+            }
+        }
+        
+        int delrow[] = {-1,0,+1,0};
+        int delcol[] = {0,+1,0,-1};
+        
+        while(!q.empty()){
+            int row = q.front().first;
+            int col = q.front().second;
+            q.pop();
+            
+            //Traverse all 4 directions
+            for(int i=0;i<4;i++){
+                int nrow = row + delrow[i];
+                int ncol = col + delcol[i];
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && vis[nrow][ncol] == 0 && grid[nrow][ncol] == 1)
+                {
+                    q.push({nrow,ncol});
+                    vis[nrow][ncol] = 1;
+                }
+            }
+        }
+        int cnt = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j] == 1 && vis[i][j] == 0) cnt++;
+            }
+        }
+        return cnt;
+    }
 };
