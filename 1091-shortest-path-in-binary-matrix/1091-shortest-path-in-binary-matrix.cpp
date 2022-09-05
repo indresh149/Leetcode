@@ -1,27 +1,36 @@
 class Solution {
 public:
-    int shortestPathBinaryMatrix(vector<vector<int>>& g) {
-        queue<pair<int, int>> q;
-        int steps = 0;
-  q.push({ 0, 0 });
-  while (!q.empty()) {
-    ++steps;
-    queue<pair<int, int>> q1;
-    while (!q.empty()) {
-      auto c = q.front();
-      q.pop();
-      if (exchange(g[c.first][c.second], 1) == 1) continue;
-      if (c.first == g.size() - 1 && c.second == g.size() - 1) return steps;
-      for (auto i = c.first - 1; i <= c.first + 1; ++i)
-        for (auto j = c.second - 1; j <= c.second + 1; ++j)
-          if (i != c.first || j != c.second) {
-            if (i >= 0 && j >= 0 && i < g.size() && j < g.size() && !g[i][j]) {
-              q1.push({ i, j });
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        queue<pair<pair<int,int>,int>> q;
+        q.push({{0,0},1});
+        
+        if(grid[0][0] == 1) return -1;
+        
+        if(grid[0][0] == 0 && grid.size() == 1 && grid[0].size() == 1) return 1;
+        
+        vector<vector<bool>> visited(grid.size(),vector<bool>(grid.size(),false));
+        visited[0][0] = true;
+        while(!q.empty()){
+           pair<int,int> p = q.front().first; //{0,0}
+            int x = p.first;  //0
+            int y = p.second; //0
+            int lengthOfPath = q.front().second; //1
+            q.pop();
+            
+            vector<pair<int,int>> neighbours = {{0,1},{0,-1},{1,0},{-1,0},{1,1},{-1,-1},{1,-1},{-1,1}};
+            
+            for(pair<int,int> neighbour: neighbours)
+            {
+                int newx = neighbour.first + x;
+                int newy = neighbour.second + y;
+                if(newx >= 0 && newy >= 0 && newx < grid.size() && newy < grid.size() && grid[newx][newy] == 0 && !visited[newx][newy]){
+                    q.push({{newx,newy},lengthOfPath+1});
+                    visited[newx][newy] = true;
+                    
+                    if(newx == grid.size()-1 && newy == grid.size()-1) return lengthOfPath+1;
+                }
             }
-          }
-    }
-    swap(q, q1);
-  }
-  return -1;
+        }
+        return -1;
     }
 };
