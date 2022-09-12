@@ -7,10 +7,10 @@ public:
     
     for(int ind = n-1;ind>=0;ind--){
          //sell
-        curNotBuy = max(values[ind]  + aheadBuy,0 + aheadNotBuy);
+        curNotBuy = max(values[ind] - fee + aheadBuy,0 + aheadNotBuy);
         
         //buy
-        curBuy = max(-values[ind] - fee + aheadNotBuy,0 + aheadBuy);                       
+        curBuy = max(-values[ind]  + aheadNotBuy,0 + aheadBuy);                       
           
         aheadBuy = curBuy;
         aheadNotBuy = curNotBuy;
