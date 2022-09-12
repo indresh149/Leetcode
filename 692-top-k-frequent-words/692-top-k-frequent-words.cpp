@@ -1,21 +1,42 @@
 class Solution {
 public:
-    bool static compare(pair<int,string> p1,pair<int,string> p2){
-        if(p1.first == p2.first) return p1.second < p2.second;
-        return p1.first > p2.first;
+    #define psi pair<int, string>
+    class myComparator {
+  public:
+    bool operator() (const psi &p1, const psi &p2) {
+      if(p1.first == p2.first) return p1.second < p2.second;
+      
+      return p1.first > p2.first;
     }
+    };
+        
     vector<string> topKFrequent(vector<string>& words, int k) {
-        unordered_map<string,int> mp;
-        for(auto word:words) mp[word]++;
-        vector<pair<int,string>> vp;
-        for(auto pr:mp){
-            vp.push_back({pr.second,pr.first});
-        }
-        sort(vp.begin(),vp.end(),compare);
-        vector<string> ans;
-        for(int i=0;i<k;i++){
-            ans.push_back(vp[i].second);
-        }
-        return ans;
+          int n = words.size();
+        unordered_map<string, int> freq;
+
+      for(string word : words) {
+        freq[word]++;
+       }
+        
+        priority_queue<psi, vector<psi>, myComparator> pq;
+        
+        for(auto it : freq) {
+         pq.push({it.second, it.first});
+
+         if(pq.size() > k) {
+         pq.pop();
+          }
+          }
+        
+        vector<string> ans(k);
+        int m = k-1;
+
+          while(pq.size() > 0) {
+            ans[m--] = pq.top().second;
+            pq.pop();
+          }
+
+          return ans;
+          
     }
 };
