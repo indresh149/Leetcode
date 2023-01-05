@@ -2,8 +2,7 @@ class Solution {
 public:
     int maxRotateFunction(vector<int>& nums) {
         if(nums.size() == 0) {
-            return 0;
-            
+            return 0;    
         }
         
         long long allsum = 0;
